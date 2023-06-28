@@ -2,7 +2,7 @@ import { defineConfig } from 'dumi';
 
 export default defineConfig({
   themeConfig: {
-    name: 'dumi-docs',
+    name: 'WebBook',
     nav: [
       {
         title: 'React',
@@ -41,5 +41,6 @@ export default defineConfig({
         },
       ],
     },
+    showLineNum: true
   },
 });

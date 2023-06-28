@@ -1,3 +1,9 @@
+---
+title: Hooks # 配置页面标题,同时生成 <title> 标签
+description: React hooks # 配置页面简介，同时用于生成 <meta> 标签
+keywords: [React hooks] # 配置页面关键词，同时用于生成 <meta> 标签
+---
+
 # Hooks
 
 ## useState
@@ -90,7 +96,8 @@ export default Index;
 
 ### deps 书写的几种情况
 
-1. deps 如果不写，那么在组件 state/props 发生变化的时候，都会执行 effect,如果 effect 本身还要更新 state，那么就会发生无限循环(不可取)
+1. deps 如果不写，那么在组件 state/props 发生变化的时候，都会执行 effect,如果 effect 本身还要更新
+   state，那么就会发生无限循环(不可取)
 2. deps 如果是[], 只会在组件挂载的时候执行一次 effect，后面不再执行
 3. deps 如果是[a,b], a,b 只要一个发生变化，effect 才会执行
 
@@ -189,7 +196,8 @@ const Index: React.FC<any> = () => {
 export default Index;
 ```
 
-可以看见,虽然我们更新后的 person 和默认的 person 在值类型上是一样的，但是 useEffect 在比较[person]时，始终认为它已经发生变化了，导致触发 effect。
+可以看见,虽然我们更新后的 person 和默认的 person 在值类型上是一样的，但是 useEffect 在比较[person]时，始终认为它已经发生变化了，导致触发
+effect。
 **这是因为它们的引用地址不同**
 
 > 注意: 如果强行比较对象、数组时，可以通过 JSON.stringify() 转化为字符串，当作 deps 的参数。
@@ -254,7 +262,8 @@ export default Index;
 
 > 缓存回调函数，只有当依赖项发生变化时，才重新创建回调函数，从而避免不必要的函数创建和调用
 
-它和 useMemo 几乎是相同的代码实现，useMemo 比 useCallback 多了一步，即执行 nextCreate() 的步骤。useCallback(fn, deps) 等价于 useMemo(() => fn, deps)
+它和 useMemo 几乎是相同的代码实现，useMemo 比 useCallback 多了一步，即执行 nextCreate() 的步骤。useCallback(fn, deps) 等价于
+useMemo(() => fn, deps)
 
 ### 性能问题
 
@@ -312,7 +321,8 @@ const TestButton: React.FC<{ num: number; onAdd: () => void }> = memo(
 export default Index;
 ```
 
-例子中，虽然【useCallback 点击】按钮的 onAdd 方法被 useCallback 包裹，但是在切换 flag 这个无关的 state 时，还是会触发 TestButton 的更新.
+例子中，虽然【useCallback 点击】按钮的 onAdd 方法被 useCallback 包裹，但是在切换 flag 这个无关的 state 时，还是会触发
+TestButton 的更新.
 
 用 memo 包裹后，组件传递的 onAdd 还是之前缓存的，没有发生改变，所以不会触发更新。
 
@@ -361,3 +371,40 @@ export default Index;
 ```
 
 **想要获取函数式组件的方法，必须使用 useImperativeHandle，原因是函数式组件并没有实例**
+
+### 缓存数据
+
+```tsx
+import { useRef, FC, forwardRef } from 'react';
+import { Button, Input } from 'antd';
+
+function Timer() {
+  const intervalRef = useRef(null);
+  const countRef = useRef(0);
+
+  const startTimer = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      countRef.current++;
+      console.log(countRef.current);
+    }, 1000);
+  };
+
+  const stopTimer = () => {
+    clearInterval(intervalRef.current);
+  };
+
+  return (
+    <div>
+      <p>Count: {countRef.current}</p>
+      <button onClick={startTimer}>Start</button>
+      <button onClick={stopTimer}>Stop</button>
+    </div>
+  );
+}
+export default Timer;
+```
+
+useRef 和 useState 不同，useRef 并不会触发渲染。也就是说 UI 和 useRef 保存的值并不同步，
+useState 适用于**自身组件的状态值**，而 useRef 更适合存储**外部通信的值**，并且这些值不会影响 render 的逻辑。比如在
+setTimeout、setInterval 用到的值。

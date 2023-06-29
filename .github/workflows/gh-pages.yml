@@ -6,8 +6,6 @@ on:
       - main # default branch
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest # 运行环境
-  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

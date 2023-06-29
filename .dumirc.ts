@@ -4,8 +4,8 @@ import {defineConfig} from 'dumi';
 const repo = 'web-development-book'
 export default defineConfig({
   themeConfig: {
-    base: process.env.NODE_ENV === 'production' ? `/${repo}/` : '/',
-    publicPath: process.env.NODE_ENV === 'production' ? `/${repo}/` : '/',
+    base: process.env.NODE_ENV === 'production' ? `/${repo}` : '',
+    publicPath: process.env.NODE_ENV === 'production' ? `/${repo}` : '',
     name: 'WebBook',
     logo: '/web.png',
     nav: [

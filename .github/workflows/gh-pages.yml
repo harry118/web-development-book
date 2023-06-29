@@ -22,7 +22,6 @@ jobs:
         run: |
           npm install
           npm run build
-        uses: actions/cache@v1
       # 文档编译命令，如果是 react 模板需要修改为 npm run docs:build
 #        run: npm run build
 

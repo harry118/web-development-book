@@ -27,6 +27,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           branch: gh-pages
+          github_token: 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
 #          github_token: ${{ secrets.GITHUB_TOKEN }}
           # 文档目录，如果是 react 模板需要修改为 docs-dist
           publish_dir: ./dist
